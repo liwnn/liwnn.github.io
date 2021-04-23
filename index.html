@@ -1,1 +1,45 @@
-Hello World
+<div style="width:800px;margin:0 auto; margin-top:100px;">
+    <lable style="color:#000000;">Unix timestamp:</lable>
+    <input type="text" id="timestamp" name="timestamp" style="height:35px;margin-left:10px" placeholder="时间戳" size="20"
+        maxlength="12" oninput="value=value.replace(/[^\d]/g,'')" />
+    <lable style="color:#444444;">秒</lable>
+    <button type=" button" onclick="format()"
+        style="width:60px;height:35px;margin-left:10px;background-color:#009688;color:#FFFFFF;">转换</button>
+    <input type="text" id="date" name="date" style="height:35px;margin-left:10px;text-align:center;" size="20"
+        readonly="true" />
+    <lable style="color:#444444;">北京时间</lable>
+</div>
+<script>
+    function format() {
+        var timestamp = document.getElementById("timestamp").value;
+        document.getElementById("date").value = formatDate(timestamp);
+    }
+
+    function formatDate(time, fmt) {
+        if (!fmt) {
+            fmt = 'yyyy-MM-dd hh:mm:ss'
+        }
+        var date = new Date(time * 1000);
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        let o = {
+            'M+': date.getMonth() + 1,
+            'd+': date.getDate(),
+            'h+': date.getHours(),
+            'm+': date.getMinutes(),
+            's+': date.getSeconds()
+        };
+        for (let k in o) {
+            if (new RegExp(`(${k})`).test(fmt)) {
+                let str = o[k] + '';
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));
+            }
+        }
+        return fmt;
+    }
+    function padLeftZero(str) {
+        return ('00' + str).substr(str.length);
+    };
+
+</script>
